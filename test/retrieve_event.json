@@ -1,0 +1,3 @@
+{
+  "body":"{\"operation\": \"RETRIEVE\",\"resource\": {\"resource_identifier\": \"uuid_here\"}}"
+}
