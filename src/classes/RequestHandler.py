@@ -1,29 +1,21 @@
-import decimal
 import json
+import os
 
 import boto3
 from boto3.dynamodb.conditions import Key
 from boto3_type_annotations.dynamodb import Table
-import os
 
 
 class RequestHandler:
 
-    def __init__(self, dynamodb=None, table_name=None):
+    def __init__(self, dynamodb=None):
         if dynamodb is None:
-            self.dynamodb = boto3.resource('dynamodb')
+            self.dynamodb = boto3.resource('dynamodb', region_name=os.environ['REGION'])
         else:
             self.dynamodb = dynamodb
 
-        if table_name is None:
-            self.table_name = os.environ.get("TABLE_NAME")
-        else:
-            self.table_name = table_name
-
+        self.table_name = os.environ.get("TABLE_NAME")
         self.table: Table = self.dynamodb.Table(self.table_name)
-
-    def get_table_connection(self):
-        return self.table
 
     def retrieve_resource(self, uuid):
         ddb_response = self.table.query(
@@ -45,15 +37,9 @@ class RequestHandler:
                 'headers': {'Content-Type': 'application/json'}
             }
         else:
-            raise ValueError("Unknown operation")
+            return {
+                'statusCode': 400,
+                'body': 'insufficient parameters'
+            }
 
 
-# Helper class to convert a DynamoDB item to JSON.
-class DecimalEncoder(json.JSONEncoder):
-    def default(self, o):
-        if isinstance(o, decimal.Decimal):
-            if abs(o) % 1 > 0:
-                return float(o)
-            else:
-                return int(o)
-        return super(DecimalEncoder, self).default(o)

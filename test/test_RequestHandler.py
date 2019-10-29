@@ -1,14 +1,14 @@
 import json
 import os
-import random
-import string
 import unittest
 
 import boto3
-import uuid
-from boto3.dynamodb.conditions import Key
 from moto import mock_dynamodb2
-import arrow as arrow
+
+
+def unittest_lambda_handler(event, context):
+    unittest.TextTestRunner().run(
+        unittest.TestLoader().loadTestsFromTestCase(TestHandlerCase))
 
 
 @mock_dynamodb2
@@ -20,13 +20,15 @@ class TestHandlerCase(unittest.TestCase):
         os.environ['AWS_SECRET_ACCESS_KEY'] = 'testing'
         os.environ['AWS_SECURITY_TOKEN'] = 'testing'
         os.environ['AWS_SESSION_TOKEN'] = 'testing'
+        os.environ['TABLE_NAME'] = 'testing'
+        os.environ['REGION'] = 'eu-west-1'
 
     def tearDown(self):
         pass
 
-    def setup_mock_database(self, table_name):
-        dynamodb = boto3.resource('dynamodb', region_name='eu-west-1')
-        table_connection = dynamodb.create_table(TableName=table_name,
+    def setup_mock_database(self):
+        dynamodb = boto3.resource('dynamodb', region_name=os.environ['REGION'])
+        table_connection = dynamodb.create_table(TableName=os.environ['TABLE_NAME'],
                                                  KeySchema=[
                                                      {'AttributeName': 'resource_identifier',
                                                       'KeyType': 'HASH'},
@@ -53,27 +55,34 @@ class TestHandlerCase(unittest.TestCase):
         )
         return dynamodb
 
-    def remove_mock_database(self, dynamodb, table_name):
-        dynamodb.Table(table_name).delete()
+    def remove_mock_database(self, dynamodb):
+        dynamodb.Table(os.environ['TABLE_NAME']).delete()
+
+    def test_app(self):
+        from src import app
+        self.assertRaises(ValueError, app.handler, None, None)
+        event = {
+            "body": "{\"operation\": \"UNKNOWN_OPERATION\"} "
+        }
+        handler_response = app.handler(event, None)
+        self.assertEqual(handler_response['statusCode'], 400, 'HTTP Status code not 400')
 
     def test_retrieve_resource(self):
         from src.classes.RequestHandler import RequestHandler
-        table_name = 'testing'
-        dynamodb = self.setup_mock_database(table_name)
-        request_handler = RequestHandler(dynamodb, table_name)
+        dynamodb = self.setup_mock_database()
+        request_handler = RequestHandler(dynamodb)
 
         retrieve_response = request_handler.retrieve_resource('ebf20333-35a5-4a06-9c58-68ea688a9a8b')
 
         self.assertEqual(retrieve_response['ResponseMetadata']['HTTPStatusCode'], 200, 'HTTP Status code not 200')
         self.assertEqual(retrieve_response['Items'][0]['resource_identifier'], 'ebf20333-35a5-4a06-9c58-68ea688a9a8b',
                          'Value not retrieved as expected')
-        self.remove_mock_database(dynamodb, table_name)
+        self.remove_mock_database(dynamodb)
 
     def test_handler_retrieve_resource(self):
         from src.classes.RequestHandler import RequestHandler
-        table_name = 'testing'
-        dynamodb = self.setup_mock_database(table_name)
-        request_handler = RequestHandler(dynamodb, table_name)
+        dynamodb = self.setup_mock_database()
+        request_handler = RequestHandler(dynamodb)
 
         event = {
             "body": "{\"operation\": \"RETRIEVE\",\"resource\": {\"resource_identifier\": \"ebf20333-35a5-4a06-9c58-68ea688a9a8b\"}}"
@@ -86,7 +95,7 @@ class TestHandlerCase(unittest.TestCase):
         self.assertEqual(handler_retrieve_response['statusCode'], 200, 'HTTP Status code not 200')
         self.assertEqual(handler_retrieve_response_json['Items'][0]['resource_identifier'],
                          'ebf20333-35a5-4a06-9c58-68ea688a9a8b', 'Value not retrieved as expected')
-        self.remove_mock_database(dynamodb, table_name)
+        self.remove_mock_database(dynamodb)
 
 
 if __name__ == '__main__':
