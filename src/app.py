@@ -1,4 +1,4 @@
-from common.constants import Constants
+from .common.constants import Constants
 from .classes.RequestHandler import RequestHandler
 
 

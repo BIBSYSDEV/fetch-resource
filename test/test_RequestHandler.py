@@ -6,7 +6,7 @@ import unittest
 import boto3
 from moto import mock_dynamodb2
 
-from common.constants import Constants
+from .common.constants import Constants
 
 
 def unittest_lambda_handler(event, context):
