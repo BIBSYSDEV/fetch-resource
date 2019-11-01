@@ -1,3 +1,4 @@
+import http
 import json
 import os
 
@@ -6,6 +7,13 @@ from boto3.dynamodb.conditions import Key
 from boto3_type_annotations.dynamodb import Table
 
 from common.constants import Constants
+
+
+def response(status_code, body):
+    return {
+        Constants.RESPONSE_STATUS_CODE: status_code,
+        Constants.RESPONSE_BODY: body
+    }
 
 
 class RequestHandler:
@@ -27,18 +35,27 @@ class RequestHandler:
         return ddb_response
 
     def handler(self, event, context):
-        operation = json.loads(event[Constants.EVENT_BODY]).get(Constants.JSON_ATTRIBUTE_NAME_OPERATION)
-        resource = json.loads(event[Constants.EVENT_BODY]).get(Constants.JSON_ATTRIBUTE_NAME_RESOURCE)
-
-        if operation == Constants.OPERATION_RETRIEVE:
-            uuid = resource['resource_identifier']
-            ddb_response = self.retrieve_resource(uuid)
-            return {
-                Constants.RESPONSE_STATUS_CODE: 200,
-                Constants.RESPONSE_BODY: json.dumps(ddb_response)
-            }
+        if event is None or Constants.EVENT_BODY not in event:
+            return response(http.HTTPStatus.BAD_REQUEST, 'Insufficient parameters')
         else:
+            body = json.loads(event[Constants.EVENT_BODY])
+            operation = body.get(Constants.JSON_ATTRIBUTE_NAME_OPERATION)
+            resource = body.get(Constants.JSON_ATTRIBUTE_NAME_RESOURCE)
+
+            if operation == Constants.OPERATION_RETRIEVE and resource is not None and Constants.DDB_FIELD_RESOURCE_IDENTIFIER in resource:
+                uuid = resource['resource_identifier']
+                ddb_response = self.retrieve_resource(uuid)
+                if len(ddb_response[Constants.DDB_RESPONSE_ATTRIBUTE_NAME_ITEMS]) == 0:
+                    return {
+                        Constants.RESPONSE_STATUS_CODE: http.HTTPStatus.NOT_FOUND,
+                        Constants.RESPONSE_BODY: json.dumps(ddb_response)
+                    }
+                else:
+                    return {
+                        Constants.RESPONSE_STATUS_CODE: http.HTTPStatus.OK,
+                        Constants.RESPONSE_BODY: json.dumps(ddb_response)
+                    }
             return {
-                Constants.RESPONSE_STATUS_CODE: 400,
+                Constants.RESPONSE_STATUS_CODE: http.HTTPStatus.BAD_REQUEST,
                 Constants.RESPONSE_BODY: 'Insufficient parameters'
             }
