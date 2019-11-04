@@ -17,3 +17,4 @@ class Constants:
     DDB_FIELD_RESOURCE_IDENTIFIER = 'resource_identifier'
 
     ERROR_MISSING_EVENT = 'Missing event'
+    ERROR_INSUFFICIENT_PARAMETERS = 'Insufficient parameters'

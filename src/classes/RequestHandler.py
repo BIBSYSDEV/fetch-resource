@@ -36,26 +36,16 @@ class RequestHandler:
 
     def handler(self, event, context):
         if event is None or Constants.EVENT_BODY not in event:
-            return response(http.HTTPStatus.BAD_REQUEST, 'Insufficient parameters')
-        else:
-            body = json.loads(event[Constants.EVENT_BODY])
-            operation = body.get(Constants.JSON_ATTRIBUTE_NAME_OPERATION)
-            resource = body.get(Constants.JSON_ATTRIBUTE_NAME_RESOURCE)
+            return response(http.HTTPStatus.BAD_REQUEST, Constants.ERROR_INSUFFICIENT_PARAMETERS)
 
-            if operation == Constants.OPERATION_RETRIEVE and resource is not None and Constants.DDB_FIELD_RESOURCE_IDENTIFIER in resource:
-                uuid = resource['resource_identifier']
-                ddb_response = self.retrieve_resource(uuid)
-                if len(ddb_response[Constants.DDB_RESPONSE_ATTRIBUTE_NAME_ITEMS]) == 0:
-                    return {
-                        Constants.RESPONSE_STATUS_CODE: http.HTTPStatus.NOT_FOUND,
-                        Constants.RESPONSE_BODY: json.dumps(ddb_response)
-                    }
-                else:
-                    return {
-                        Constants.RESPONSE_STATUS_CODE: http.HTTPStatus.OK,
-                        Constants.RESPONSE_BODY: json.dumps(ddb_response)
-                    }
-            return {
-                Constants.RESPONSE_STATUS_CODE: http.HTTPStatus.BAD_REQUEST,
-                Constants.RESPONSE_BODY: 'Insufficient parameters'
-            }
+        body = json.loads(event[Constants.EVENT_BODY])
+        operation = body.get(Constants.JSON_ATTRIBUTE_NAME_OPERATION)
+        resource = body.get(Constants.JSON_ATTRIBUTE_NAME_RESOURCE)
+
+        if operation == Constants.OPERATION_RETRIEVE and resource is not None and Constants.DDB_FIELD_RESOURCE_IDENTIFIER in resource:
+            uuid = resource['resource_identifier']
+            ddb_response = self.retrieve_resource(uuid)
+            if len(ddb_response[Constants.DDB_RESPONSE_ATTRIBUTE_NAME_ITEMS]) == 0:
+                return response(http.HTTPStatus.NOT_FOUND, json.dumps(ddb_response))
+            return response(http.HTTPStatus.OK, json.dumps(ddb_response))
+        return response(http.HTTPStatus.BAD_REQUEST, Constants.ERROR_INSUFFICIENT_PARAMETERS)
