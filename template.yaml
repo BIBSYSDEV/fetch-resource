@@ -38,7 +38,7 @@ Resources:
   FetchResource:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./src
+      CodeUri: ./fetch_resource
       Handler: app.handler
       Runtime: python3.7
       Events:
