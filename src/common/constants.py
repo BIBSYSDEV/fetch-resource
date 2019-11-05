@@ -3,10 +3,9 @@ class Constants:
     ENV_VAR_TABLE_NAME = 'TABLE_NAME'
 
     EVENT_BODY = 'body'
+    EVENT_HTTP_METHOD = 'httpMethod'
 
-    OPERATION_RETRIEVE = 'RETRIEVE'
-
-    JSON_ATTRIBUTE_NAME_OPERATION = 'operation'
+    HTTP_METHOD_GET = 'GET'
     JSON_ATTRIBUTE_NAME_RESOURCE = 'resource'
 
     RESPONSE_STATUS_CODE = 'statusCode'

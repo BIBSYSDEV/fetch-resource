@@ -72,7 +72,8 @@ class TestHandlerCase(unittest.TestCase):
         from src import app
         self.assertRaises(ValueError, app.handler, None, None)
         event = {
-            "body": "{\"operation\": \"UNKNOWN_OPERATION\"} "
+            Constants.EVENT_HTTP_METHOD: Constants.HTTP_METHOD_GET,
+            "body": "{\"resource\": {}} "
         }
         handler_response = app.handler(event, None)
         self.assertEqual(handler_response[Constants.RESPONSE_STATUS_CODE], http.HTTPStatus.BAD_REQUEST,
@@ -93,13 +94,25 @@ class TestHandlerCase(unittest.TestCase):
             'Value not retrieved as expected')
         remove_mock_database(dynamodb)
 
+    def test_handler_retrieve_resource_missing_event(self):
+        from src.classes.RequestHandler import RequestHandler
+        dynamodb = self.setup_mock_database()
+        request_handler = RequestHandler(dynamodb)
+
+        handler_retrieve_response = request_handler.handler(None, None)
+
+        self.assertEqual(handler_retrieve_response[Constants.RESPONSE_STATUS_CODE], http.HTTPStatus.BAD_REQUEST,
+                         'HTTP Status code not 400')
+        remove_mock_database(dynamodb)
+
     def test_handler_retrieve_resource(self):
         from src.classes.RequestHandler import RequestHandler
         dynamodb = self.setup_mock_database()
         request_handler = RequestHandler(dynamodb)
 
         event = {
-            "body": "{\"operation\": \"RETRIEVE\",\"resource\": {\"resource_identifier\": \"ebf20333-35a5-4a06-9c58-68ea688a9a8b\"}}"
+            Constants.EVENT_HTTP_METHOD: Constants.HTTP_METHOD_GET,
+            "body": "{\"resource\": {\"resource_identifier\": \"ebf20333-35a5-4a06-9c58-68ea688a9a8b\"}}"
         }
 
         handler_retrieve_response = request_handler.handler(event, None)
@@ -113,18 +126,33 @@ class TestHandlerCase(unittest.TestCase):
                          EXISTING_RESOURCE_IDENTIFIER, 'Value not retrieved as expected')
         remove_mock_database(dynamodb)
 
+    def test_handler_retrieve_resource_wrong_http_method(self):
+        from src.classes.RequestHandler import RequestHandler
+        dynamodb = self.setup_mock_database()
+        request_handler = RequestHandler(dynamodb)
+
+        event = {
+            Constants.EVENT_HTTP_METHOD: 'POST',
+            "body": "{\"resource\": {\"resource_identifier\": \"ebf20333-35a5-4a06-9c58-68ea688a9a8b\"}}"
+        }
+
+        handler_retrieve_response = request_handler.handler(event, None)
+
+        self.assertEqual(handler_retrieve_response[Constants.RESPONSE_STATUS_CODE], http.HTTPStatus.BAD_REQUEST,
+                         'HTTP Status code not 400')
+        remove_mock_database(dynamodb)
+
     def test_handler_retrieve_resource_not_found(self):
         from src.classes.RequestHandler import RequestHandler
         dynamodb = self.setup_mock_database()
         request_handler = RequestHandler(dynamodb)
 
         event = {
-            "body": "{\"operation\": \"RETRIEVE\",\"resource\": {\"resource_identifier\": \"fbf20333-35a5-4a06-9c58-68ea688a9a8b\"}}"
+            Constants.EVENT_HTTP_METHOD: Constants.HTTP_METHOD_GET,
+            "body": "{\"resource\": {\"resource_identifier\": \"fbf20333-35a5-4a06-9c58-68ea688a9a8b\"}}"
         }
 
         handler_retrieve_response = request_handler.handler(event, None)
-
-        handler_retrieve_response_json = json.loads(handler_retrieve_response[Constants.RESPONSE_BODY])
 
         self.assertEqual(handler_retrieve_response[Constants.RESPONSE_STATUS_CODE], http.HTTPStatus.NOT_FOUND,
                          'HTTP Status code not 404')
@@ -136,7 +164,8 @@ class TestHandlerCase(unittest.TestCase):
         request_handler = RequestHandler(dynamodb)
 
         event = {
-            "body": "{\"operation\": \"RETRIEVE\"}"
+            Constants.EVENT_HTTP_METHOD: Constants.HTTP_METHOD_GET,
+            "body": "{}"
         }
 
         handler_retrieve_response = request_handler.handler(event, None)
@@ -151,7 +180,8 @@ class TestHandlerCase(unittest.TestCase):
         request_handler = RequestHandler(dynamodb)
 
         event = {
-            "body": "{\"operation\": \"RETRIEVE\",\"resource\": {}}"
+            Constants.EVENT_HTTP_METHOD: Constants.HTTP_METHOD_GET,
+            "body": "{\"resource\": {}}"
         }
 
         handler_retrieve_response = request_handler.handler(event, None)

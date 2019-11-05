@@ -39,10 +39,10 @@ class RequestHandler:
             return response(http.HTTPStatus.BAD_REQUEST, Constants.ERROR_INSUFFICIENT_PARAMETERS)
 
         body = json.loads(event[Constants.EVENT_BODY])
-        operation = body.get(Constants.JSON_ATTRIBUTE_NAME_OPERATION)
+        http_method = event[Constants.EVENT_HTTP_METHOD]
         resource = body.get(Constants.JSON_ATTRIBUTE_NAME_RESOURCE)
 
-        if operation == Constants.OPERATION_RETRIEVE and resource is not None and Constants.DDB_FIELD_RESOURCE_IDENTIFIER in resource:
+        if http_method == Constants.HTTP_METHOD_GET and resource is not None and Constants.DDB_FIELD_RESOURCE_IDENTIFIER in resource:
             uuid = resource['resource_identifier']
             ddb_response = self.retrieve_resource(uuid)
             if len(ddb_response[Constants.DDB_RESPONSE_ATTRIBUTE_NAME_ITEMS]) == 0:
