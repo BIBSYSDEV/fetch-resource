@@ -69,7 +69,7 @@ class TestHandlerCase(unittest.TestCase):
         return dynamodb
 
     def test_app(self):
-        from src import app
+        import app
         self.assertRaises(ValueError, app.handler, None, None)
         event = {
             Constants.EVENT_HTTP_METHOD: Constants.HTTP_METHOD_GET,
@@ -80,7 +80,7 @@ class TestHandlerCase(unittest.TestCase):
                          'HTTP Status code not 400')
 
     def test_retrieve_resource(self):
-        from src.classes.RequestHandler import RequestHandler
+        from RequestHandler import RequestHandler
         dynamodb = self.setup_mock_database()
         request_handler = RequestHandler(dynamodb)
 
@@ -95,7 +95,7 @@ class TestHandlerCase(unittest.TestCase):
         remove_mock_database(dynamodb)
 
     def test_handler_retrieve_resource_missing_event(self):
-        from src.classes.RequestHandler import RequestHandler
+        from RequestHandler import RequestHandler
         dynamodb = self.setup_mock_database()
         request_handler = RequestHandler(dynamodb)
 
@@ -106,7 +106,7 @@ class TestHandlerCase(unittest.TestCase):
         remove_mock_database(dynamodb)
 
     def test_handler_retrieve_resource(self):
-        from src.classes.RequestHandler import RequestHandler
+        from RequestHandler import RequestHandler
         dynamodb = self.setup_mock_database()
         request_handler = RequestHandler(dynamodb)
 
@@ -127,7 +127,7 @@ class TestHandlerCase(unittest.TestCase):
         remove_mock_database(dynamodb)
 
     def test_handler_retrieve_resource_wrong_http_method(self):
-        from src.classes.RequestHandler import RequestHandler
+        from RequestHandler import RequestHandler
         dynamodb = self.setup_mock_database()
         request_handler = RequestHandler(dynamodb)
 
@@ -143,7 +143,7 @@ class TestHandlerCase(unittest.TestCase):
         remove_mock_database(dynamodb)
 
     def test_handler_retrieve_resource_not_found(self):
-        from src.classes.RequestHandler import RequestHandler
+        from RequestHandler import RequestHandler
         dynamodb = self.setup_mock_database()
         request_handler = RequestHandler(dynamodb)
 
@@ -159,7 +159,7 @@ class TestHandlerCase(unittest.TestCase):
         remove_mock_database(dynamodb)
 
     def test_handler_retrieve_resource_missing_resource(self):
-        from src.classes.RequestHandler import RequestHandler
+        from RequestHandler import RequestHandler
         dynamodb = self.setup_mock_database()
         request_handler = RequestHandler(dynamodb)
 
@@ -175,7 +175,7 @@ class TestHandlerCase(unittest.TestCase):
         remove_mock_database(dynamodb)
 
     def test_handler_retrieve_resource_missing_resource_identifier(self):
-        from src.classes.RequestHandler import RequestHandler
+        from RequestHandler import RequestHandler
         dynamodb = self.setup_mock_database()
         request_handler = RequestHandler(dynamodb)
 
