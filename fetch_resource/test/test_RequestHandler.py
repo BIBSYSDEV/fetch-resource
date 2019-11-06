@@ -1,7 +1,12 @@
-import http
 import os
-import unittest
+import sys
 
+testdir = os.path.dirname(__file__)
+srcdir = '../'
+sys.path.insert(0, os.path.abspath(os.path.join(testdir, srcdir)))
+
+import http
+import unittest
 import boto3
 from moto import mock_dynamodb2
 
@@ -38,18 +43,18 @@ class TestHandlerCase(unittest.TestCase):
     def setup_mock_database(self):
         _dynamodb = boto3.resource('dynamodb', region_name=os.environ[Constants.ENV_VAR_REGION])
         _table_connection = _dynamodb.create_table(TableName=os.environ[Constants.ENV_VAR_TABLE_NAME],
-                                                 KeySchema=[
-                                                     {'AttributeName': 'resource_identifier',
-                                                      'KeyType': 'HASH'},
-                                                     {'AttributeName': 'modifiedDate',
-                                                      'KeyType': 'RANGE'}],
-                                                 AttributeDefinitions=[
-                                                     {'AttributeName': 'resource_identifier',
-                                                      'AttributeType': 'S'},
-                                                     {'AttributeName': 'modifiedDate',
-                                                      'AttributeType': 'S'}],
-                                                 ProvisionedThroughput={'ReadCapacityUnits': 1,
-                                                                        'WriteCapacityUnits': 1})
+                                                   KeySchema=[
+                                                       {'AttributeName': 'resource_identifier',
+                                                        'KeyType': 'HASH'},
+                                                       {'AttributeName': 'modifiedDate',
+                                                        'KeyType': 'RANGE'}],
+                                                   AttributeDefinitions=[
+                                                       {'AttributeName': 'resource_identifier',
+                                                        'AttributeType': 'S'},
+                                                       {'AttributeName': 'modifiedDate',
+                                                        'AttributeType': 'S'}],
+                                                   ProvisionedThroughput={'ReadCapacityUnits': 1,
+                                                                          'WriteCapacityUnits': 1})
         _table_connection.put_item(
             Item={
                 'resource_identifier': EXISTING_RESOURCE_IDENTIFIER,
