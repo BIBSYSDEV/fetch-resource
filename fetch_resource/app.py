@@ -1,8 +1,8 @@
 import http
 
-from .main.common.constants import Constants
-from .main.RequestHandler import RequestHandler
-from .main.common.helpers import response
+from main.common.constants import Constants
+from main.RequestHandler import RequestHandler
+from main.common.helpers import response
 
 
 def handler(event, context):
