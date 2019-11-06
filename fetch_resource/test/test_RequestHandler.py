@@ -1,6 +1,8 @@
 import os
 import sys
 
+from common.constants import Constants
+
 testdir = os.path.dirname(__file__)
 srcdir = '../'
 sys.path.insert(0, os.path.abspath(os.path.join(testdir, srcdir)))
@@ -10,7 +12,6 @@ import unittest
 import boto3
 from moto import mock_dynamodb2
 
-from fetch_resource.main.common.constants import Constants
 
 
 def unittest_lambda_handler(event, context):

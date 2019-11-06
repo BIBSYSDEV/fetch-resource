@@ -5,9 +5,9 @@ import os
 import boto3
 from boto3.dynamodb.conditions import Key
 from boto3_type_annotations.dynamodb import Table
+from common.constants import Constants
 
-from .common.helpers import response
-from .common.constants import Constants
+from common.helpers import response
 
 
 class RequestHandler:
