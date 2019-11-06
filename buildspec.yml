@@ -35,6 +35,6 @@ phases:
 artifacts:
   type: zip
   files:
-    - '**/*'
+    - './package'
     - packaged.yaml
     - template-configuration.json
