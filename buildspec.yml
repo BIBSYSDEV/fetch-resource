@@ -13,7 +13,9 @@ phases:
       - pip3 install aws-sam-cli
 
       # Install project requirements
-      - pip3 install -r fetch_resource/requirements.txt
+#      - pip3 install -r fetch_resource/requirements.txt
+
+      - pip3 install --target ./package git+git://github.com/BIBSYSDEV/resource-utilities.git
 
   pre_build:
     commands:
