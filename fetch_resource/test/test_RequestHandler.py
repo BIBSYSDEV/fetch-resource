@@ -1,5 +1,4 @@
 import http
-import json
 import os
 import unittest
 
@@ -76,6 +75,30 @@ class TestHandlerCase(unittest.TestCase):
         self.assertEqual(_handler_response[Constants.RESPONSE_STATUS_CODE], http.HTTPStatus.BAD_REQUEST,
                          'HTTP Status code not 400')
 
+    def test_app_missing_env_region(self):
+        from fetch_resource import app
+        _event = {
+            Constants.EVENT_HTTP_METHOD: Constants.HTTP_METHOD_GET,
+            "body": "{\"resource\": {}} "
+        }
+
+        del os.environ[Constants.ENV_VAR_REGION]
+        _handler_response = app.handler(_event, None)
+        self.assertEqual(_handler_response[Constants.RESPONSE_STATUS_CODE], http.HTTPStatus.INTERNAL_SERVER_ERROR,
+                         'HTTP Status code not 500')
+
+    def test_app_missing_env_table(self):
+        from fetch_resource import app
+        _event = {
+            Constants.EVENT_HTTP_METHOD: Constants.HTTP_METHOD_GET,
+            "body": "{\"resource\": {}} "
+        }
+
+        del os.environ[Constants.ENV_VAR_TABLE_NAME]
+        _handler_response = app.handler(_event, None)
+        self.assertEqual(_handler_response[Constants.RESPONSE_STATUS_CODE], http.HTTPStatus.INTERNAL_SERVER_ERROR,
+                         'HTTP Status code not 500')
+
     def test_handler_retrieve_resource_missing_event(self):
         from fetch_resource.main.RequestHandler import RequestHandler
         _dynamodb = self.setup_mock_database()
@@ -99,13 +122,8 @@ class TestHandlerCase(unittest.TestCase):
 
         _handler_retrieve_response = _request_handler.handler(_event, None)
 
-        _handler_retrieve_response_json = json.loads(_handler_retrieve_response[Constants.RESPONSE_BODY])
-
         self.assertEqual(_handler_retrieve_response[Constants.RESPONSE_STATUS_CODE], http.HTTPStatus.OK,
                          'HTTP Status code not 200')
-        self.assertEqual(_handler_retrieve_response_json[Constants.DDB_RESPONSE_ATTRIBUTE_NAME_ITEMS][0][
-                             Constants.DDB_FIELD_RESOURCE_IDENTIFIER],
-                         EXISTING_RESOURCE_IDENTIFIER, 'Value not retrieved as expected')
         remove_mock_database(_dynamodb)
 
     def test_handler_retrieve_resource_wrong_http_method(self):

@@ -6,14 +6,8 @@ import boto3
 from boto3.dynamodb.conditions import Key
 from boto3_type_annotations.dynamodb import Table
 
+from .common.helpers import response
 from .common.constants import Constants
-
-
-def response(status_code, body):
-    return {
-        Constants.RESPONSE_STATUS_CODE: status_code,
-        Constants.RESPONSE_BODY: body
-    }
 
 
 class RequestHandler:
@@ -43,7 +37,7 @@ class RequestHandler:
         _resource = _body.get(Constants.JSON_ATTRIBUTE_NAME_RESOURCE)
 
         if _http_method == Constants.HTTP_METHOD_GET and _resource is not None \
-                and Constants.DDB_FIELD_RESOURCE_IDENTIFIER in _resource:
+                and Constants.EVENT_RESOURCE_IDENTIFIER in _resource:
             _uuid = _resource[Constants.EVENT_RESOURCE_IDENTIFIER]
             _ddb_response = self.__retrieve_resource(_uuid)
             if len(_ddb_response[Constants.DDB_RESPONSE_ATTRIBUTE_NAME_ITEMS]) == 0:
