@@ -13,7 +13,7 @@ phases:
       - pip3 install aws-sam-cli
 
       # Install lib to package dir
-      - pip3 install --target ./package git+git://github.com/BIBSYSDEV/resource-utilities.git
+      - pip3 install --target ./ git+git://github.com/BIBSYSDEV/resource-utilities.git
 
       # Install project requirements
       - pip3 install -r fetch_resource/requirements.txt
@@ -35,6 +35,5 @@ phases:
 artifacts:
   type: zip
   files:
-    - './package'
     - packaged.yaml
     - template-configuration.json
