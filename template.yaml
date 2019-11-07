@@ -4,7 +4,7 @@ Transform:
 
 Metadata:
   AWS::ServerlessRepo::Application:
-    Name: data-persistence
+    Name: fetch-resource
     Description: Performs retrieve operations in DynamoDB
     Author: Unit
     SpdxLicenseId: MIT
