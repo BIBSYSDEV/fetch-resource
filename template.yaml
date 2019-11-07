@@ -15,24 +15,9 @@ Metadata:
     SourceCodeUrl: https://github.com/BIBSYSDEV/fetch-resource
 
 Parameters:
-  ProjectId:
+  ResourceTable:
     Type: String
-    Description: The projectId used to associate new resources to team members
-  CodeDeployRole:
-    Type: String
-    Description: IAM role to allow AWS CodeDeploy to manage deployment of AWS Lambda functions
-  Stage:
-    Type: String
-    Description: The name for a project pipeline stage, such as Staging or Prod, for which resources are provisioned and deployed.
-    Default: ''
-
-Globals:
-  Function:
-    AutoPublishAlias: live
-    DeploymentPreference:
-      Enabled: true
-      Type: Canary10Percent5Minutes
-      Role: !Ref CodeDeployRole
+    Description: Reference to table containing resource data
 
 Resources:
   FetchResource:
@@ -45,10 +30,9 @@ Resources:
         PostEvent:
           Type: Api
           Properties:
-            Path: /{proxy+}
+            Path: /resources/{identifier}
             Method: GET
       Environment:
         Variables:
-          TABLE_NAME: nva-test
-#          TABLE_NAME: !GetAtt DynamoDBTable.TableName
-
+          TABLE_NAME: !Ref ResourceTable
+          REGION: !Ref AWS::Region
