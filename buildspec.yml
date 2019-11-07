@@ -27,7 +27,7 @@ phases:
       - sam build --debug
       - sam package --debug --template-file .aws-sam/build/template.yaml --s3-bucket $S3_BUCKET --output-template-file packaged.yaml
 
-  post-build:
+  post_build:
     command:
       - sam publish --template-file packaged.yaml --region eu-west-1
 
