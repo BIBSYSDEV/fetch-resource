@@ -1,3 +1,6 @@
 {
-  "body":"{\"resource\": {\"resource_identifier\": \"uuid_here\"}}"
+  "httpMethod": "GET",
+  "pathParameters": {
+    "identifier": "uuid_here"
+  }
 }

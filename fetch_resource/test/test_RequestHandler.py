@@ -1,6 +1,8 @@
 import os
 import sys
 
+from common.constants import Constants
+
 testdir = os.path.dirname(__file__)
 srcdir = '../'
 sys.path.insert(0, os.path.abspath(os.path.join(testdir, srcdir)))
@@ -10,7 +12,6 @@ import unittest
 import boto3
 from moto import mock_dynamodb2
 
-from fetch_resource.main.common.constants import Constants
 
 
 def unittest_lambda_handler(event, context):
@@ -74,7 +75,7 @@ class TestHandlerCase(unittest.TestCase):
         self.assertRaises(ValueError, app.handler, None, None)
         _event = {
             Constants.EVENT_HTTP_METHOD: Constants.HTTP_METHOD_GET,
-            "body": "{\"resource\": {}} "
+            Constants.EVENT_PATH_PARAMETERS: {Constants.EVENT_PATH_PARAMETER_IDENTIFIER: ''},
         }
         _handler_response = app.handler(_event, None)
         self.assertEqual(_handler_response[Constants.RESPONSE_STATUS_CODE], http.HTTPStatus.BAD_REQUEST,
@@ -84,7 +85,7 @@ class TestHandlerCase(unittest.TestCase):
         from fetch_resource import app
         _event = {
             Constants.EVENT_HTTP_METHOD: Constants.HTTP_METHOD_GET,
-            "body": "{\"resource\": {}} "
+            Constants.EVENT_PATH_PARAMETERS: {Constants.EVENT_PATH_PARAMETER_IDENTIFIER: ''},
         }
 
         del os.environ[Constants.ENV_VAR_REGION]
@@ -96,7 +97,7 @@ class TestHandlerCase(unittest.TestCase):
         from fetch_resource import app
         _event = {
             Constants.EVENT_HTTP_METHOD: Constants.HTTP_METHOD_GET,
-            "body": "{\"resource\": {}} "
+            Constants.EVENT_PATH_PARAMETERS: {Constants.EVENT_PATH_PARAMETER_IDENTIFIER: ''},
         }
 
         del os.environ[Constants.ENV_VAR_TABLE_NAME]
@@ -122,7 +123,7 @@ class TestHandlerCase(unittest.TestCase):
 
         _event = {
             Constants.EVENT_HTTP_METHOD: Constants.HTTP_METHOD_GET,
-            "body": "{\"resource\": {\"resource_identifier\": \"ebf20333-35a5-4a06-9c58-68ea688a9a8b\"}}"
+            Constants.EVENT_PATH_PARAMETERS: {Constants.EVENT_PATH_PARAMETER_IDENTIFIER: 'ebf20333-35a5-4a06-9c58-68ea688a9a8b'}
         }
 
         _handler_retrieve_response = _request_handler.handler(_event, None)
@@ -138,7 +139,7 @@ class TestHandlerCase(unittest.TestCase):
 
         _event = {
             Constants.EVENT_HTTP_METHOD: 'POST',
-            "body": "{\"resource\": {\"resource_identifier\": \"ebf20333-35a5-4a06-9c58-68ea688a9a8b\"}}"
+            Constants.EVENT_PATH_PARAMETERS: {Constants.EVENT_PATH_PARAMETER_IDENTIFIER: 'ebf20333-35a5-4a06-9c58-68ea688a9a8b'}
         }
 
         _handler_retrieve_response = _request_handler.handler(_event, None)
@@ -154,29 +155,13 @@ class TestHandlerCase(unittest.TestCase):
 
         _event = {
             Constants.EVENT_HTTP_METHOD: Constants.HTTP_METHOD_GET,
-            "body": "{\"resource\": {\"resource_identifier\": \"fbf20333-35a5-4a06-9c58-68ea688a9a8b\"}}"
+            Constants.EVENT_PATH_PARAMETERS: {Constants.EVENT_PATH_PARAMETER_IDENTIFIER: 'fbf20333-35a5-4a06-9c58-68ea688a9a8b'}
         }
 
         _handler_retrieve_response = _request_handler.handler(_event, None)
 
         self.assertEqual(_handler_retrieve_response[Constants.RESPONSE_STATUS_CODE], http.HTTPStatus.NOT_FOUND,
                          'HTTP Status code not 404')
-        remove_mock_database(_dynamodb)
-
-    def test_handler_retrieve_resource_missing_resource(self):
-        from fetch_resource.main.RequestHandler import RequestHandler
-        _dynamodb = self.setup_mock_database()
-        _request_handler = RequestHandler(_dynamodb)
-
-        _event = {
-            Constants.EVENT_HTTP_METHOD: Constants.HTTP_METHOD_GET,
-            "body": "{}"
-        }
-
-        _handler_retrieve_response = _request_handler.handler(_event, None)
-
-        self.assertEqual(_handler_retrieve_response[Constants.RESPONSE_STATUS_CODE], http.HTTPStatus.BAD_REQUEST,
-                         'HTTP Status code not 400')
         remove_mock_database(_dynamodb)
 
     def test_handler_retrieve_resource_missing_resource_identifier(self):
@@ -186,7 +171,7 @@ class TestHandlerCase(unittest.TestCase):
 
         _event = {
             Constants.EVENT_HTTP_METHOD: Constants.HTTP_METHOD_GET,
-            "body": "{\"resource\": {}}"
+            Constants.EVENT_PATH_PARAMETERS: {}
         }
 
         _handler_retrieve_response = _request_handler.handler(_event, None)
