@@ -11,7 +11,7 @@ Metadata:
     LicenseUrl: LICENSE
     ReadmeUrl: README.md
     HomePageUrl: https://github.com/BIBSYSDEV/fetch-resource
-    SemanticVersion: 0.0.3
+    SemanticVersion: 0.0.4
     SourceCodeUrl: https://github.com/BIBSYSDEV/fetch-resource
 
 Parameters:
@@ -25,6 +25,11 @@ Globals:
 
 Resources:
 
+  FetchResourceApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+
   FetchResource:
     Type: AWS::Serverless::Function
     Properties:
@@ -37,8 +42,14 @@ Resources:
           Properties:
             Path: /resources/{identifier}
             Method: GET
+            RestApiId: !Ref FetchResourceApi
       Environment:
         Variables:
           TABLE_NAME: !Ref ResourceTable
           REGION: !Ref AWS::Region
 
+Outputs:
+  FetchResourceApiName:
+    Value: !Ref FetchResourceApi
+    Export:
+      Name: !Sub "${AWS::StackName}-Api"
