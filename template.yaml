@@ -21,7 +21,7 @@ Parameters:
 
 Globals:
   Api:
-    Name: Prod
+    Name: FetchResourceApi
 
 Resources:
 
