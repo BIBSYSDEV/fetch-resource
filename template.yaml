@@ -19,7 +19,12 @@ Parameters:
     Type: String
     Description: Reference to table containing resource data
 
+Globals:
+  Api:
+    Name: Prod
+
 Resources:
+
   FetchResource:
     Type: AWS::Serverless::Function
     Properties:
