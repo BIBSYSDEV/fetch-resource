@@ -11,7 +11,7 @@ Metadata:
     LicenseUrl: LICENSE
     ReadmeUrl: README.md
     HomePageUrl: https://github.com/BIBSYSDEV/fetch-resource
-    SemanticVersion: 0.0.2
+    SemanticVersion: 0.0.3
     SourceCodeUrl: https://github.com/BIBSYSDEV/fetch-resource
 
 Parameters:
@@ -41,3 +41,4 @@ Resources:
         Variables:
           TABLE_NAME: !Ref ResourceTable
           REGION: !Ref AWS::Region
+
