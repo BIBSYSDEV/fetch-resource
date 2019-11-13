@@ -47,7 +47,7 @@ Resources:
     Properties:
       StageName: Prod
       Auth:
-        DefaultAuthorizer: !Ref MyCognitoAuthorizer
+        DefaultAuthorizer: MyCognitoAuthorizer
         Authorizers:
           MyCognitoAuthorizer:
             UserPoolArn: !Ref CognitoUserPoolArn
