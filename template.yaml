@@ -11,7 +11,7 @@ Metadata:
     LicenseUrl: LICENSE
     ReadmeUrl: README.md
     HomePageUrl: https://github.com/BIBSYSDEV/fetch-resource
-    SemanticVersion: 0.0.4
+    SemanticVersion: 0.0.5
     SourceCodeUrl: https://github.com/BIBSYSDEV/fetch-resource
 
 Parameters:
@@ -40,7 +40,7 @@ Resources:
         PostEvent:
           Type: Api
           Properties:
-            Path: /resources/{identifier}
+            Path: /{identifier}
             Method: GET
             RestApiId: !Ref FetchResourceApi
       Environment:
