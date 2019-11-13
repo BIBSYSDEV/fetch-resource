@@ -35,7 +35,7 @@ Resources:
       Name: FetchResourceAuthorizer
       RestApiId: !Ref FetchResourceApi
       Type: COGNITO_USER_POOLS
-      IdentitySource: Authorization
+      IdentitySource: method.request.header.Authorization
       ProviderARNs:
       - !Ref CognitoUserPoolArn
 
