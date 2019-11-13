@@ -14,6 +14,9 @@ phases:
 
       # Install project requirements
       - pip3 install -r fetch_resource/requirements.txt
+      
+      # Install linter
+      - pip3 install cfn-lint
 
   pre_build:
     commands:
@@ -23,9 +26,11 @@ phases:
 
   build:
     commands:
+      - cfn-lint .aws-sam/build/template.yaml
       # Use AWS SAM to build and package the application by using AWS CloudFormation
       - sam build --debug
       - sam package --debug --template-file .aws-sam/build/template.yaml --s3-bucket $S3_BUCKET --output-template-file packaged.yaml
+      - cfn-lint packaged.yaml
       - sam publish --template packaged.yaml  # --region eu-west-1
 
 artifacts:
