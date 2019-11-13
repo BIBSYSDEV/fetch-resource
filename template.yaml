@@ -11,7 +11,7 @@ Metadata:
     LicenseUrl: LICENSE
     ReadmeUrl: README.md
     HomePageUrl: https://github.com/BIBSYSDEV/fetch-resource
-    SemanticVersion: 0.0.6
+    SemanticVersion: 0.0.7
     SourceCodeUrl: https://github.com/BIBSYSDEV/fetch-resource
 
 Parameters:
@@ -32,6 +32,7 @@ Resources:
   FetchResourceAuthorizer:
     Type: AWS::ApiGateway::Authorizer
     Properties:
+      Name: FetchResourceAuthorizer
       RestApiId: !Ref FetchResourceApi
       Type: COGNITO_USER_POOLS
       IdentitySource: Authorization
