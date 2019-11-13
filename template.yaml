@@ -31,15 +31,15 @@ Parameters:
 Resources:
 
 
-  FetchResourceAuthorizer:
-    Type: AWS::ApiGateway::Authorizer
-    Properties:
-      Name: DefaultAuthorizer
-      RestApiId: !Ref FetchResourceApi
-      Type: COGNITO_USER_POOLS
-      IdentitySource: method.request.header.Authorization
-      ProviderARNs:
-      - !Ref CognitoUserPoolArn
+#  FetchResourceAuthorizer:
+#    Type: AWS::ApiGateway::Authorizer
+#    Properties:
+#      Name: DefaultAuthorizer
+#      RestApiId: !Ref FetchResourceApi
+#      Type: COGNITO_USER_POOLS
+#      IdentitySource: method.request.header.Authorization
+#      ProviderARNs:
+#      - !Ref CognitoUserPoolArn
 
 
   FetchResourceApi:
@@ -47,7 +47,10 @@ Resources:
     Properties:
       StageName: Prod
       Auth:
-        DefaultAuthorizer: !Ref FetchResourceAuthorizer
+        DefaultAuthorizer: !Ref MyCognitoAuthorizer
+        Authorizers:
+          MyCognitoAuthorizer:
+            UserPoolArn: !Ref CognitoUserPoolArn
 
   FetchResource:
     Type: AWS::Serverless::Function
