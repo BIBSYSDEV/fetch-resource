@@ -11,7 +11,7 @@ Metadata:
     LicenseUrl: LICENSE
     ReadmeUrl: README.md
     HomePageUrl: https://github.com/BIBSYSDEV/fetch-resource
-    SemanticVersion: 0.0.5
+    SemanticVersion: 0.0.6
     SourceCodeUrl: https://github.com/BIBSYSDEV/fetch-resource
 
 Parameters:
