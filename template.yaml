@@ -22,25 +22,7 @@ Parameters:
     Type: String
     Description: Reference to Cognito UserPool for the stage
 
-#Globals:
-#  Api:
-#    Name: FetchResourceApi
-#    Auth:
-#      DefaultAuthorizer: !Ref FetchResourceAuthorizer
-
 Resources:
-
-
-#  FetchResourceAuthorizer:
-#    Type: AWS::ApiGateway::Authorizer
-#    Properties:
-#      Name: DefaultAuthorizer
-#      RestApiId: !Ref FetchResourceApi
-#      Type: COGNITO_USER_POOLS
-#      IdentitySource: method.request.header.Authorization
-#      ProviderARNs:
-#      - !Ref CognitoUserPoolArn
-
 
   FetchResourceApi:
     Type: AWS::Serverless::Api
