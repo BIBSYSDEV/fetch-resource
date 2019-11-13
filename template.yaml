@@ -18,6 +18,9 @@ Parameters:
   ResourceTable:
     Type: String
     Description: Reference to table containing resource data
+  CognitoUserPoolArn:
+    Type: String
+    Description: Reference to Cognito UserPool for the stage
 
 Globals:
   Api:
@@ -25,10 +28,23 @@ Globals:
 
 Resources:
 
+
+  FetchResourceAuthorizer:
+    Type: AWS::ApiGateway::Authorizer
+    Properties:
+      RestApiId: !Ref FetchResourceApi
+      Type: COGNITO_USER_POOLS
+      IdentitySource: Authorization
+      ProviderARNs:
+      - !Ref CognitoUserPoolArn
+
+
   FetchResourceApi:
     Type: AWS::Serverless::Api
     Properties:
       StageName: Prod
+      Auth:
+        DefaultAuthorizer: !Ref FetchResourceAuthorizer
 
   FetchResource:
     Type: AWS::Serverless::Function
