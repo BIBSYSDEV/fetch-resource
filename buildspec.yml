@@ -26,12 +26,13 @@ phases:
 
   build:
     commands:
-      # - cfn-lint -t .aws-sam/build/template.yaml
       # Use AWS SAM to build and package the application by using AWS CloudFormation
       - sam build --debug
       - sam package --debug --template-file .aws-sam/build/template.yaml --s3-bucket $S3_BUCKET --output-template-file packaged.yaml
-      - cfn-lint packaged.yaml
-      - sam publish --template packaged.yaml  # --region eu-west-1
+  post_build:
+    commands:
+      # Use the (short) commit hash from git as semantic version
+      - sam publish --template packaged.yaml --semantic-version $CODEBUILD_RESOLVED_BUILD_VERSION
 
 artifacts:
   type: zip
