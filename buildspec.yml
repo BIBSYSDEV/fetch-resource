@@ -15,9 +15,6 @@ phases:
       # Install project requirements
       - pip3 install -r fetch_resource/requirements.txt
       
-      # Install linter
-      - pip3 install cfn-lint
-
   pre_build:
     commands:
 
