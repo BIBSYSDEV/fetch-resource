@@ -30,7 +30,7 @@ phases:
   post_build:
     commands:
       # Use the (short) commit hash from git as semantic version
-      - sam publish --template packaged.yaml --semantic-version 1.0.0+${CODEBUILD_BUILD_NUMBER}
+      - sam publish --template packaged.yaml --semantic-version 1.2.0+${CODEBUILD_BUILD_NUMBER}
 
 artifacts:
   type: zip
