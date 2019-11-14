@@ -33,7 +33,11 @@ phases:
     commands:
       # Use the (short) commit hash from git as semantic version
       - env
-      - sam publish --template packaged.yaml --semantic-version $CODEBUILD_BUILD_NUMBER
+      - echo variant1
+      - echo ${CODEBUILD_BUILD_NUMBER}
+      - echo variant2
+      - echo $CODEBUILD_BUILD_NUMBER
+      - sam publish --template packaged.yaml --semantic-version ${CODEBUILD_BUILD_NUMBER}
 
 artifacts:
   type: zip
