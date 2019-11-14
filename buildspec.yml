@@ -32,6 +32,7 @@ phases:
   post_build:
     commands:
       # Use the (short) commit hash from git as semantic version
+      - env
       - sam publish --template packaged.yaml --semantic-version $CODEBUILD_RESOLVED_BUILD_VERSION
 
 artifacts:
