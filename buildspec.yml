@@ -29,15 +29,11 @@ phases:
       # Use AWS SAM to build and package the application by using AWS CloudFormation
       - sam build --debug
       - sam package --debug --template-file .aws-sam/build/template.yaml --s3-bucket $S3_BUCKET --output-template-file packaged.yaml
+
   post_build:
     commands:
       # Use the (short) commit hash from git as semantic version
-      - env
-      - echo variant1
-      - echo ${CODEBUILD_BUILD_NUMBER}
-      - echo variant2
-      - echo $CODEBUILD_BUILD_NUMBER
-      - sam publish --template packaged.yaml --semantic-version ${CODEBUILD_BUILD_NUMBER}
+      - sam publish --template packaged.yaml --semantic-version 1.0.${CODEBUILD_BUILD_NUMBER}
 
 artifacts:
   type: zip
