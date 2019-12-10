@@ -2,7 +2,6 @@ import http
 import json
 import os
 
-import boto3
 from boto3.dynamodb.conditions import Key
 from boto3_type_annotations.dynamodb import Table
 from common.constants import Constants
@@ -13,10 +12,8 @@ from common.helpers import response
 class RequestHandler:
 
     def __init__(self, dynamodb=None):
-        if dynamodb is None:
-            self.dynamodb = boto3.resource(Constants.DDB, region_name=os.environ[Constants.ENV_VAR_REGION])
-        else:
-            self.dynamodb = dynamodb
+
+        self.dynamodb = dynamodb
 
         self.table_name = os.environ.get(Constants.ENV_VAR_TABLE_NAME)
         self.table: Table = self.dynamodb.Table(self.table_name)
