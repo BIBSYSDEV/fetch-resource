@@ -21,7 +21,7 @@ class RequestHandler:
     def __retrieve_resource(self, uuid):
         _ddb_response = self.table.query(
             KeyConditionExpression=Key(Constants.DDB_FIELD_RESOURCE_IDENTIFIER).eq(uuid),
-            ScanIndexForward=True
+            ScanIndexForward=False
         )
         return _ddb_response
 
