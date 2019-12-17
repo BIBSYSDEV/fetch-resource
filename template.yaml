@@ -20,6 +20,13 @@ Parameters:
   CognitoAuthorizerArn:
     Type: String
     Description: Reference to Cognito UserPool for the stage
+  CustomDomain:
+    Type: String
+    Description: Custom API to connect this lambda to
+  CustomDomainBasePath:
+    Type: String
+    Description: Base path mapping in CustomDomain
+
 
 Resources:
 
@@ -54,8 +61,10 @@ Resources:
         - DynamoDBCrudPolicy:
             TableName: !Ref ResourceTable
 
-Outputs:
-  FetchResourceApiName:
-    Value: !Ref FetchResourceApi
-    Export:
-      Name: !Sub "${AWS::StackName}-Api"
+  FetchResourceBasePathMapping:
+    Type: AWS::ApiGateway::BasePathMapping
+    Properties:
+      BasePath: !Ref CustomDomainBasePath
+      DomainName: !Ref CustomDomain
+      RestApiId: !Ref FetchResourceApi
+      Stage: !Ref FetchResourceApi.Stage
