@@ -39,6 +39,9 @@ Resources:
         Authorizers:
           MyCognitoAuthorizer:
             UserPoolArn: !Ref CognitoAuthorizerArn
+      Cors:
+        AllowCredentials: true
+        AllowOrigin: '"localhost:3000"'
 
   FetchResource:
     Type: AWS::Serverless::Function
