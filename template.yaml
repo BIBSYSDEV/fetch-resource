@@ -42,6 +42,8 @@ Resources:
       Cors:
         AllowCredentials: true
         AllowOrigin: "'http://localhost:3000'"
+        AllowHeaders: '"Authorization"'
+
 
   FetchResource:
     Type: AWS::Serverless::Function
