@@ -42,7 +42,7 @@ Resources:
       Cors:
         AllowCredentials: true
         AllowOrigin: "'http://localhost:3000'"
-        AllowHeaders: '"Authorization"'
+        AllowHeaders: "'Authorization'"
 
 
   FetchResource:
