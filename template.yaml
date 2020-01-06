@@ -43,6 +43,7 @@ Resources:
         AllowCredentials: true
         AllowOrigin: "'http://localhost:3000'"
         AllowHeaders: "'Authorization'"
+        AllowMethods: "'OPTIONS,GET'"
 
 
   FetchResource:
