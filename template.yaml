@@ -41,8 +41,8 @@ Resources:
             UserPoolArn: !Ref CognitoAuthorizerArn
       Cors:
         AllowCredentials: true
-        AllowOrigin: "'http://localhost:3000'"
-        AllowHeaders: "'Authorization'"
+        AllowOrigin: "'*'"
+        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
         AllowMethods: "'OPTIONS,GET'"
 
 
@@ -65,6 +65,7 @@ Resources:
         Variables:
           TABLE_NAME: !Ref ResourceTable
           REGION: !Ref AWS::Region
+          ALLOWED_ORIGIN: '*'
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref ResourceTable

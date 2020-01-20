@@ -5,6 +5,7 @@ import os
 from boto3.dynamodb.conditions import Key
 from boto3_type_annotations.dynamodb import Table
 from common.constants import Constants
+from common.http_constants import HttpConstants
 
 from common.helpers import response
 
@@ -35,7 +36,7 @@ class RequestHandler:
         _identifier = event[Constants.EVENT_PATH_PARAMETERS][Constants.EVENT_PATH_PARAMETER_IDENTIFIER]
         _http_method = event[Constants.EVENT_HTTP_METHOD]
 
-        if _http_method == Constants.HTTP_METHOD_GET and len(_identifier) > 0:
+        if _http_method == HttpConstants.HTTP_METHOD_GET and len(_identifier) > 0:
             _ddb_response = self.__retrieve_resource(_identifier)
             if len(_ddb_response[Constants.DDB_RESPONSE_ATTRIBUTE_NAME_ITEMS]) == 0:
                 return response(http.HTTPStatus.NOT_FOUND, json.dumps(_ddb_response))
