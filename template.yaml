@@ -77,3 +77,4 @@ Resources:
       DomainName: !Ref CustomDomain
       RestApiId: !Ref FetchResourceApi
       Stage: !Ref FetchResourceApi.Stage
+
