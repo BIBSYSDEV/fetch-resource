@@ -8,6 +8,7 @@ import unittest
 import boto3
 from moto import mock_dynamodb2
 
+from common.http_constants import HttpConstants
 from common.constants import Constants
 
 testdir = os.path.dirname(__file__)
@@ -83,7 +84,7 @@ class TestHandlerCase(unittest.TestCase):
         del os.environ['REGION']
         from fetch_resource import app
         _event = {
-            Constants.EVENT_HTTP_METHOD: Constants.HTTP_METHOD_GET,
+            Constants.EVENT_HTTP_METHOD: HttpConstants.HTTP_METHOD_GET,
             Constants.EVENT_PATH_PARAMETERS: {Constants.EVENT_PATH_PARAMETER_IDENTIFIER: self.EXISTING_RESOURCE_IDENTIFIER},
         }
         _handler_response = app.handler(_event, None)
@@ -96,7 +97,7 @@ class TestHandlerCase(unittest.TestCase):
         del os.environ['TABLE_NAME']
         from fetch_resource import app
         _event = {
-            Constants.EVENT_HTTP_METHOD: Constants.HTTP_METHOD_GET,
+            Constants.EVENT_HTTP_METHOD: HttpConstants.HTTP_METHOD_GET,
             Constants.EVENT_PATH_PARAMETERS: {Constants.EVENT_PATH_PARAMETER_IDENTIFIER: ''},
         }
 
@@ -125,7 +126,7 @@ class TestHandlerCase(unittest.TestCase):
         _request_handler = RequestHandler(_dynamodb)
 
         _event = {
-            Constants.EVENT_HTTP_METHOD: Constants.HTTP_METHOD_GET,
+            Constants.EVENT_HTTP_METHOD: HttpConstants.HTTP_METHOD_GET,
             Constants.EVENT_PATH_PARAMETERS: {Constants.EVENT_PATH_PARAMETER_IDENTIFIER: 'ebf20333-35a5-4a06-9c58-68ea688a9a8b'}
         }
 
@@ -163,7 +164,7 @@ class TestHandlerCase(unittest.TestCase):
         _request_handler = RequestHandler(_dynamodb)
 
         _event = {
-            Constants.EVENT_HTTP_METHOD: Constants.HTTP_METHOD_GET,
+            Constants.EVENT_HTTP_METHOD: HttpConstants.HTTP_METHOD_GET,
             Constants.EVENT_PATH_PARAMETERS: {Constants.EVENT_PATH_PARAMETER_IDENTIFIER: 'fbf20333-35a5-4a06-9c58-68ea688a9a8b'}
         }
 
@@ -182,7 +183,7 @@ class TestHandlerCase(unittest.TestCase):
         _request_handler = RequestHandler(_dynamodb)
 
         _event = {
-            Constants.EVENT_HTTP_METHOD: Constants.HTTP_METHOD_GET,
+            Constants.EVENT_HTTP_METHOD: HttpConstants.HTTP_METHOD_GET,
             Constants.EVENT_PATH_PARAMETERS: {}
         }
 
