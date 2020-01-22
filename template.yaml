@@ -26,7 +26,10 @@ Parameters:
   CustomDomainBasePath:
     Type: String
     Description: Base path mapping in CustomDomain
-
+  CorsAllowHeaders:
+    Type: String
+    Description: String of headers to allow.
+    Default: '{{resolve:ssm:defaultCorsAllowHeaders:1}}'
 
 Resources:
 
@@ -41,7 +44,9 @@ Resources:
             UserPoolArn: !Ref CognitoAuthorizerArn
       Cors:
         AllowCredentials: true
-        AllowOrigin: "'*'"
+      AllowOrigin: !Sub
+        - "'${Domain}'"
+        - Domain: !Ref  CorsOrigin
         AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
         AllowMethods: "'OPTIONS,GET'"
 
@@ -65,7 +70,7 @@ Resources:
         Variables:
           TABLE_NAME: !Ref ResourceTable
           REGION: !Ref AWS::Region
-          ALLOWED_ORIGIN: '*'
+          ALLOWED_ORIGIN: !Ref  CorsOrigin
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref ResourceTable
