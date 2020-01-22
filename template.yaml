@@ -26,10 +26,10 @@ Parameters:
   CustomDomainBasePath:
     Type: String
     Description: Base path mapping in CustomDomain
-  CorsAllowHeaders:
+  CorsOrigin:
     Type: String
-    Description: String of headers to allow.
-    Default: '{{resolve:ssm:defaultCorsAllowHeaders:1}}'
+    Description: Value to use for Cors 'Allow...' header if value is set
+    Default: '{{resolve:secretsmanager:DefaultCorsOrigin:SecretString}}'
 
 Resources:
 
@@ -44,12 +44,11 @@ Resources:
             UserPoolArn: !Ref CognitoAuthorizerArn
       Cors:
         AllowCredentials: true
-      AllowOrigin: !Sub
-        - "'${Domain}'"
-        - Domain: !Ref  CorsOrigin
+        AllowOrigin: !Sub
+          - "'${Domain}'"
+          - Domain: !Ref CorsOrigin
         AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
         AllowMethods: "'OPTIONS,GET'"
-
 
   FetchResource:
     Type: AWS::Serverless::Function
