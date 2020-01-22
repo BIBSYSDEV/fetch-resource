@@ -26,10 +26,6 @@ Parameters:
   CustomDomainBasePath:
     Type: String
     Description: Base path mapping in CustomDomain
-  CorsOrigin:
-    Type: String
-    Description: Value to use for Cors 'Allow...' header if value is set
-    Default: '{{resolve:secretsmanager:DefaultCorsOrigin:SecretString}}'
 
 Resources:
 
@@ -38,7 +34,6 @@ Resources:
     Properties:
       StageName: Prod
       Auth:
-#        DefaultAuthorizer: MyCognitoAuthorizer
         Authorizers:
           MyCognitoAuthorizer:
             UserPoolArn: !Ref CognitoAuthorizerArn
