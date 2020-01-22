@@ -2,4 +2,4 @@ boto3
 boto3_type_annotations
 arrow
 moto
-git+git://github.com/BIBSYSDEV/resource-utilities.git@13d035b5ab5c07b38c14ea4a9cf4bdfe52082b57#egg=nva-resource-utilities
+git+git://github.com/BIBSYSDEV/resource-utilities.git@758c4c8c25bd052df10845051791b57ac284c9ac#egg=nva-resource-utilities
