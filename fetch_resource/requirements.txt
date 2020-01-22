@@ -1,5 +1,6 @@
+pylint
 boto3
 boto3_type_annotations
 arrow
 moto
--e git+git://github.com/BIBSYSDEV/resource-utilities.git@8886cb6916823236d2674b9a09cf41e5d07cb995#egg=nva-resource-utilities
+git+git://github.com/BIBSYSDEV/resource-utilities.git@39fb4a620c125273ceeace33b4322c01aae471d3
