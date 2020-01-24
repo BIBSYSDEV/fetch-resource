@@ -13,6 +13,16 @@ Metadata:
     HomePageUrl: https://github.com/BIBSYSDEV/fetch-resource
     SourceCodeUrl: https://github.com/BIBSYSDEV/fetch-resource
 
+Globals:
+  Api:
+    Cors:
+      AllowCredentials: true
+      AllowOrigin: !Sub
+        - "'${Domain}'"
+        - Domain: !Ref  CorsOrigin
+      AllowHeaders: !Ref CorsAllowHeaders
+
+
 Parameters:
   ResourceTable:
     Type: String
@@ -26,6 +36,14 @@ Parameters:
   CustomDomainBasePath:
     Type: String
     Description: Base path mapping in CustomDomain
+  CorsOrigin:
+    Type: String
+    Description: Value to use for Cors 'Allow...' header if value is set
+    Default: '{{resolve:secretsmanager:DefaultCorsOrigin:SecretString}}'
+  CorsAllowHeaders:
+    Type: String
+    Description: String of headers to allow.
+    Default: '{{resolve:ssm:defaultCorsAllowHeaders:1}}'
 
 Resources:
 
@@ -38,8 +56,8 @@ Resources:
           MyCognitoAuthorizer:
             UserPoolArn: !Ref CognitoAuthorizerArn
       Cors:
-        AllowOrigin: "'*'"
-        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+#        AllowOrigin: "'*'"
+#        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
         AllowMethods: "'OPTIONS,GET'"
 
   FetchResource:
@@ -61,7 +79,7 @@ Resources:
         Variables:
           TABLE_NAME: !Ref ResourceTable
           REGION: !Ref AWS::Region
-          ALLOWED_ORIGIN: '*'
+          ALLOWED_ORIGIN: !Ref CorsOrigin
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref ResourceTable
